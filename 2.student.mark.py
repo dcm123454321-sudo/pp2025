@@ -31,7 +31,7 @@ class Student(Entity):
 class Course(Entity):
     def __init__(self, id, name):
         super().__init__(id, name)
-        self.marks = []
+        self.marks = []   #The tupples for student + score are all stored here
     
 
 
@@ -39,6 +39,12 @@ def enter_score(course):
     for student in student_list:
         score = float(input(f"Enter student {student.name} score"))
         course.marks.append((student,score))
+
+
+
+
+#^This is STORED INSIDE EACH INDIVIDUAL COURSE OBJECT ARRAY, for example Math1 will have student1-2-3 name and score1-2-3 paired together as a tuple
+
 
 def enter_all_score():
      
@@ -68,8 +74,17 @@ def initialized_course_list(n):
         course = Course(id,name)
         course_list.append(course)
 
+def show_mark(course):
+    print(f"Marks for course: {course.name}")
+    for student, score in course.marks:
+        print(f"{student.id} - {student.name}: {score}")
 
 
+
+
+def show_all_marks():
+    for course in course_list:
+        show_mark(course)
 
 
 
