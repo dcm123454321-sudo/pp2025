@@ -87,8 +87,35 @@ def show_all_marks():
         show_mark(course)
 
 
+def show_student():
+    for student in student_list:
+        print(f"{student.name} ")
+
+def show_course():
+    for course in course_list:
+        print(f"{course.name} ")
 
 
+def load_demo_data():
+    student_list.clear()
+    course_list.clear()
+
+    # students
+    s1 = Student("S01", "Alice", "2004-01-01")
+    s2 = Student("S02", "Bob", "2004-02-02")
+    s3 = Student("S03", "Charlie", "2004-03-03")
+    student_list.extend([s1, s2, s3])
+
+    # courses
+    c1 = Course("C01", "Math")
+    c2 = Course("C02", "Programming")
+    course_list.extend([c1, c2])
+
+    # marks (student object, score)
+    c1.marks = [(s1, 18.0), (s2, 12.5), (s3, 15.0)]
+    c2.marks = [(s1, 19.0), (s2, 14.0), (s3, 16.5)]
+
+    print("Demo data loaded.")
 
 
 
@@ -105,6 +132,7 @@ def main():
         print("5. List courses")
         print("6. Show student marks for a given course")
         print("0. Exit")
+        print("D. Load Demo")
 
         choice = input("Enter: ").strip()
 
@@ -116,6 +144,16 @@ def main():
             initialized_course_list(c)
         elif choice == "3":
             enter_all_score()
+        elif choice == "4":
+            show_student()
+        elif choice == "5":
+            show_course()
+        elif choice == "6":
+            show_all_marks
+        elif choice == "0":
+            break
+        elif choice == "D":
+            load_demo_data()
 
 
 
