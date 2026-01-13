@@ -1,6 +1,8 @@
 
 print("RUNNING VERSION 4")
 
+import math
+import numpy
 
 
 student_list = []
@@ -21,24 +23,37 @@ class Entity:
         self.id = id
         self.name = name
 
+
 class Student(Entity):
     def __init__(self, id, name, dob):
         super().__init__(id, name)
         self.dob = dob
-        
+    def get_id(self): return self.id
+    def get_name(self): return self.name
+
 
 
 class Course(Entity):
     def __init__(self, id, name):
         super().__init__(id, name)
-        self.marks = []   #The tupples for student + score are all stored here
+        self.__marks = []   #The tupples for student + score are all stored here
     
+    def add_mark(self, student_id, score):
+        self.__marks.append((student_id, float(score)))
+
+    def get_marks(self):
+        return list(self.__marks)   # copy
+
+
+    def get_id(self): return self.id
+    def get_name(self): return self.name
 
 
 def enter_score(course):
     for student in student_list:
-        score = float(input(f"Enter student {student.name} score"))
-        course.marks.append((student,score))
+        score = float(input(f"Enter student {student.get_name()} score"))
+        score = math.floor(score*10)/10
+        course.add_mark(student, score)
 
 
 
@@ -49,7 +64,7 @@ def enter_score(course):
 def enter_all_score():
      
     for course in course_list:
-        print(f"Enter all the student score in {course.name}")
+        print(f"Enter all the student score in {course.get_name()}")
         enter_score(course)
 
 
@@ -96,27 +111,48 @@ def show_course():
         print(f"{course.name} ")
 
 
+def calculate_gpa(id):
+    marks = []
+    for course in course_list:
+        for student, score in course.get_marks():
+            if student.get_id() == id:
+                marks.append(float(score))
+    
+    mark_arr = numpy.array(marks,dtype=float)
+    avg = float(mark_arr.mean())
+    print(f"Student with the id {id} has a GPA of {avg} ")
+    return avg
+
+def enter_id():
+    id = input("Enter id ")
+    return id
+    
+
+
+
+
 def load_demo_data():
     student_list.clear()
     course_list.clear()
 
-    # students
     s1 = Student("S01", "Alice", "2004-01-01")
     s2 = Student("S02", "Bob", "2004-02-02")
     s3 = Student("S03", "Charlie", "2004-03-03")
     student_list.extend([s1, s2, s3])
 
-    # courses
     c1 = Course("C01", "Math")
     c2 = Course("C02", "Programming")
     course_list.extend([c1, c2])
 
-    # marks (student object, score)
-    c1.marks = [(s1, 18.0), (s2, 12.5), (s3, 15.0)]
-    c2.marks = [(s1, 19.0), (s2, 14.0), (s3, 16.5)]
+    # Store (Student_object, score)
+    c1.add_mark(s1, 18.26)
+    c1.add_mark(s2, 12.99)
+    c1.add_mark(s3, 15.04)
 
-    print("Demo data loaded.")
-
+    c2.add_mark(s1, 19.91)
+    c2.add_mark(s2, 14.33)
+    c2.add_mark(s3, 16.58)
+    print("Demo data loaded!")
 
 
   
@@ -131,6 +167,7 @@ def main():
         print("4. List students")
         print("5. List courses")
         print("6. Show student marks for a given course")
+        print("7. Calculate a given student GPA")
         print("0. Exit")
         print("D. Load Demo")
 
@@ -150,6 +187,11 @@ def main():
             show_course()
         elif choice == "6":
             show_all_marks()
+        elif choice == "7":
+            sid = enter_id()
+            calculate_gpa(sid)
+        elif choice == "0":
+            break
         elif choice == "D":
             load_demo_data()
 
